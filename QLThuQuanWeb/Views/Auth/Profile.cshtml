@@ -1,0 +1,92 @@
+@model QLThuQuanWeb.Models.ThanhVien
+
+@{
+    ViewData["Title"] = "Thông tin cá nhân";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0">Thông tin cá nhân</h3>
+                </div>
+                <div class="card-body">
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            @TempData["Success"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <ul class="mb-0">
+                                @foreach (var modelError in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                {
+                                    <li>@modelError.ErrorMessage</li>
+                                }
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <form asp-action="UpdateProfile" method="post">
+                        <!-- Thêm thông báo lỗi nếu có -->
+                        @if (ViewBag.Error != null)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                @ViewBag.Error
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
+
+                        <!-- Các trường input -->
+                        <div class="mb-3">
+                            <label asp-for="Username" class="form-label">Tên đăng nhập</label>
+                            <input asp-for="Username" class="form-control" readonly />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Fullname" class="form-label">Họ và tên</label>
+                            <input asp-for="Fullname" class="form-control" required />
+                            <span asp-validation-for="Fullname" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Khoa" class="form-label">Khoa</label>
+                            <input asp-for="Khoa" class="form-control" required />
+                            <span asp-validation-for="Khoa" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Nganh" class="form-label">Ngành</label>
+                            <input asp-for="Nganh" class="form-control" required />
+                            <span asp-validation-for="Nganh" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="TrangThai" class="form-label">Trạng thái</label>
+                            <input asp-for="TrangThai" class="form-control" readonly />
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save"></i> Lưu thay đổi
+                            </button>
+                            <a asp-controller="Home" asp-action="Index" class="btn">
+                                <i class="bi bi-arrow-left"></i> Quay lại
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
