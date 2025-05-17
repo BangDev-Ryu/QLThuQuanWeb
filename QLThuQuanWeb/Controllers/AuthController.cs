@@ -48,7 +48,7 @@ namespace QLThuQuanWeb.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(ThanhVien model)
         {
-            if (ModelState.IsValid)
+            try
             {
                 var existingUser = await _context.ThanhViens
                     .FirstOrDefaultAsync(u => u.Username == model.Username);
@@ -64,8 +64,17 @@ namespace QLThuQuanWeb.Controllers
 
                 _context.ThanhViens.Add(model);
                 await _context.SaveChangesAsync();
-
+                
+                // Thêm TempData để hiển thị thông báo thành công
+                TempData["Success"] = "Đăng ký thành công!";
                 return RedirectToAction(nameof(Login));
+                
+            }
+            catch (Exception ex)
+            {
+                // Log lỗi
+                System.Diagnostics.Debug.WriteLine($"Register Error: {ex.Message}");
+                ViewBag.Error = "Có lỗi xảy ra khi đăng ký";
             }
 
             return View(model);
@@ -101,10 +110,6 @@ namespace QLThuQuanWeb.Controllers
         {
             try 
             {
-                if (!ModelState.IsValid)
-                {
-                    return View("Profile", model);
-                }
 
                 var username = HttpContext.Session.GetString("Username");
                 if (string.IsNullOrEmpty(username))
@@ -123,6 +128,7 @@ namespace QLThuQuanWeb.Controllers
 
                 // Cập nhật thông tin
                 user.Fullname = model.Fullname;
+                user.Password = model.Password;
                 user.Khoa = model.Khoa;
                 user.Nganh = model.Nganh;
 

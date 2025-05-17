@@ -20,21 +20,9 @@
                         </div>
                     }
 
-                    @if (!ViewData.ModelState.IsValid)
-                    {
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <ul class="mb-0">
-                                @foreach (var modelError in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                                {
-                                    <li>@modelError.ErrorMessage</li>
-                                }
-                            </ul>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    }
+                    
 
                     <form asp-action="UpdateProfile" method="post">
-                        <!-- Thêm thông báo lỗi nếu có -->
                         @if (ViewBag.Error != null)
                         {
                             <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -43,10 +31,15 @@
                             </div>
                         }
 
-                        <!-- Các trường input -->
                         <div class="mb-3">
                             <label asp-for="Username" class="form-label">Tên đăng nhập</label>
                             <input asp-for="Username" class="form-control" readonly />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label">Mật khẩu</label>
+                            <input asp-for="Password" class="form-control" required />
+                            <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
@@ -57,13 +50,13 @@
 
                         <div class="mb-3">
                             <label asp-for="Khoa" class="form-label">Khoa</label>
-                            <input asp-for="Khoa" class="form-control" required />
+                            <input asp-for="Khoa" class="form-control" readonly />
                             <span asp-validation-for="Khoa" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="Nganh" class="form-label">Ngành</label>
-                            <input asp-for="Nganh" class="form-control" required />
+                            <input asp-for="Nganh" class="form-control" readonly />
                             <span asp-validation-for="Nganh" class="text-danger"></span>
                         </div>
 
